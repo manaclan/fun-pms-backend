@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"manaclan/pms-backend/src/database"
 	"manaclan/pms-backend/src/hotel"
@@ -38,5 +39,5 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-	r.Run(":8525")
+	r.Run(os.Getenv("DEVELOP_PORT"))
 }
