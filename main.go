@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -39,5 +40,5 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-	r.Run(os.Getenv("DEVELOP_PORT"))
+	r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
 }
