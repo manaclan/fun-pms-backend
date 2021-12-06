@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -22,7 +21,11 @@ func main() {
 	}
 	database.Init()
 	r := gin.Default()
+	port := os.Getenv("PORT")
 
+	if port == "" {
+		port = "3000"
+	}
 	hotelRouter := hotel.HotelRouter{}
 	hotelRouter.Init()
 	hotelRouter.Route(r.Group("/hotel"))
@@ -40,5 +43,5 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-	r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
+	r.Run(":" + port)
 }
