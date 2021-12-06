@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"manaclan/pms-backend/src/database"
@@ -10,22 +9,13 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error getting env, %v", err)
-	}
 	database.Init()
 	r := gin.Default()
-	port := os.Getenv("PORT")
 
-	if port == "" {
-		port = "3000"
-	}
 	hotelRouter := hotel.HotelRouter{}
 	hotelRouter.Init()
 	hotelRouter.Route(r.Group("/hotel"))
@@ -43,5 +33,5 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-	r.Run(":" + port)
+	r.Run(os.Getenv("DEVELOP_PORT"))
 }
