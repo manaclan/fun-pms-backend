@@ -15,7 +15,11 @@ func main() {
 
 	database.Init()
 	r := gin.Default()
+	port := os.Getenv("PORT")
 
+	if port == "" {
+		port = "3000"
+	}
 	hotelRouter := hotel.HotelRouter{}
 	hotelRouter.Init()
 	hotelRouter.Route(r.Group("/hotel"))
@@ -33,5 +37,5 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-	r.Run(os.Getenv("DEVELOP_PORT"))
+	r.Run(":" + port)
 }
