@@ -1,4 +1,4 @@
-package users
+package user
 
 /*
 This package contain several file thus having this doc
