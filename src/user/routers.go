@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"manaclan/pms-backend/src/database"
@@ -6,17 +6,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UsersRouter struct {
+type UserRouter struct {
 	Services    Services
 	Controllers Controllers
 }
 
-func (router UsersRouter) Init() {
+func (router *UserRouter) Init() {
 	router.Services = Services{Client: database.DB}
 	router.Controllers = Controllers{Services: router.Services}
 }
 
-func (ur UsersRouter) Route(router *gin.RouterGroup) {
+func (ur *UserRouter) Route(router *gin.RouterGroup) {
 	router.POST("/login", ur.Controllers.Login)
 	router.POST("/register", ur.Controllers.Register)
 }

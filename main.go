@@ -7,6 +7,7 @@ import (
 	"manaclan/pms-backend/src/database"
 	"manaclan/pms-backend/src/hotel"
 	"manaclan/pms-backend/src/hotels"
+	"manaclan/pms-backend/src/user"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -32,10 +33,10 @@ func main() {
 	hotelsRouter := hotels.HotelsRouter{}
 	hotelsRouter.Init()
 	hotelsRouter.Route(r.Group("/hotels"))
-	// usersRouteGroup := r.Group("/users")
-	// usersRouter := users.UsersRouter{}
-	// usersRouter.Init()
-	// usersRouter.Route(usersRouteGroup)
+	usersRouteGroup := r.Group("/user")
+	usersRouter := user.UserRouter{}
+	usersRouter.Init()
+	usersRouter.Route(usersRouteGroup)
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"*"},

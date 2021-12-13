@@ -1,7 +1,8 @@
-package users
+package user
 
 import (
 	"fmt"
+	"manaclan/pms-backend/src/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,7 +22,7 @@ Y88b  d88P 888  T88b  888         d8888888888     888     888
  "Y8888P"  888   T88b 8888888888 d88P     888     888     8888888888
 */
 
-func (controllers Controllers) Register(c *gin.Context) {
+func (controllers *Controllers) Register(c *gin.Context) {
 	fmt.Println("Controller: Register")
 	username := c.PostForm("username")
 	password := c.PostForm("password")
@@ -43,17 +44,18 @@ func (controllers Controllers) Register(c *gin.Context) {
 888   T88b 8888888888 d88P     888 8888888P"
 */
 
-func (controllers Controllers) Login(c *gin.Context) {
+func (controllers *Controllers) Login(c *gin.Context) {
 	fmt.Println("Controller: Login")
+
 	username := c.PostForm("username")
 	password := c.PostForm("password")
-	isUserLoginSucceed := controllers.Services.ValidateUser(username, password)
-	fmt.Println(isUserLoginSucceed)
+	var jwt middlewares.JWTService = middlewares.JWTAuthService()
+	isUserLoginSucceed := controllers.Services.Login(username, password)
 	if isUserLoginSucceed {
 		c.JSON(200, gin.H{
 			"status":       "succeed",
 			"message":      "Login succeed!",
-			"access_token": "jwt-token",
+			"access_token": jwt.GenerateToken(username, true),
 		})
 		return
 	}

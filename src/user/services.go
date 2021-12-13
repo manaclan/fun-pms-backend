@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"context"
@@ -19,10 +19,9 @@ func (services Services) RegisterUser(username string, password string) (code in
 	var users []User
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
-	currentUsersCollection := services.Client.Database("users").Collection("current-users")
-	defaultUsersCollection := services.Client.Database("users").Collection("default-users")
+	usersCollection := services.Client.Database("pms-backend").Collection("users")
 
-	cursor, err := defaultUsersCollection.Find(
+	cursor, err := usersCollection.Find(
 		context.Background(), bson.M{"username": username})
 	if err != nil {
 		log.Fatal(err)
@@ -39,24 +38,21 @@ func (services Services) RegisterUser(username string, password string) (code in
 	if err != nil {
 		panic(err)
 	}
-	_, err = defaultUsersCollection.InsertOne(ctx, newUser)
-	if err != nil {
-		panic(err)
-	}
-	_, err = currentUsersCollection.InsertOne(ctx, newUser)
+	_, err = usersCollection.InsertOne(ctx, newUser)
 	if err != nil {
 		panic(err)
 	}
 	return 200, "Succeed!"
 }
-func (services Services) ValidateUser(username string, password string) bool {
+
+func (services Services) Login(username string, password string) bool {
 	fmt.Println("Service: ValidateUser")
 	var users []User
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
-	currentUsersCollection := services.Client.Database("users").Collection("current-users")
+	usersCollection := services.Client.Database("pms-backend").Collection("users")
 
-	cursor, err := currentUsersCollection.Find(
+	cursor, err := usersCollection.Find(
 		context.Background(), bson.M{"username": username})
 	if err != nil {
 		log.Fatal(err)
